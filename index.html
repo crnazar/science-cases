@@ -1,0 +1,1064 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="An interactive case-study activity for pre-service science teachers exploring youth counternarratives of the culture of power in science.">
+<title>Counternarratives in Science</title>
+<style>
+  :root{
+    --paper:#eef1ee;
+    --paper-raised:#ffffff;
+    --paper-sunk:#e2e7e2;
+    --ink:#161c2b;
+    --ink-soft:#4c5567;
+    --ink-faint:#7a8496;
+    --line:#c9d1cb;
+    --line-strong:#aab3ac;
+    --case-accent-light:#3d5a80;
+    --case-accent-dark:#8fb0e0;
+    --accent: var(--case-accent-light);
+    --accent-ink:#ffffff;
+    --pin-physical:#b23a2e;
+    --pin-verbal:#2f7d4f;
+    --shadow: 0 1px 2px rgba(20,25,40,.06), 0 8px 24px -12px rgba(20,25,40,.18);
+    --radius: 3px;
+    --font-display: 800 1em/1.1 ui-sans-serif, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --font-body: ui-sans-serif, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --font-voice: italic 1em/1.5 Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif;
+    --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#11151c;
+      --paper-raised:#1a212b;
+      --paper-sunk:#0c0f14;
+      --ink:#eef1f6;
+      --ink-soft:#aab4c4;
+      --ink-faint:#79839a;
+      --line:#2a3340;
+      --line-strong:#3a4756;
+      --accent: var(--case-accent-dark);
+      --accent-ink:#0c0f14;
+      --pin-physical:#e2685a;
+      --pin-verbal:#5cbd85;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 28px -12px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#11151c; --paper-raised:#1a212b; --paper-sunk:#0c0f14;
+    --ink:#eef1f6; --ink-soft:#aab4c4; --ink-faint:#79839a;
+    --line:#2a3340; --line-strong:#3a4756;
+    --accent: var(--case-accent-dark); --accent-ink:#0c0f14;
+    --pin-physical:#e2685a; --pin-verbal:#5cbd85;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 28px -12px rgba(0,0,0,.6);
+  }
+  :root[data-theme="light"]{
+    --paper:#eef1ee; --paper-raised:#ffffff; --paper-sunk:#e2e7e2;
+    --ink:#161c2b; --ink-soft:#4c5567; --ink-faint:#7a8496;
+    --line:#c9d1cb; --line-strong:#aab3ac;
+    --accent: var(--case-accent-light); --accent-ink:#ffffff;
+    --pin-physical:#b23a2e; --pin-verbal:#2f7d4f;
+    --shadow: 0 1px 2px rgba(20,25,40,.06), 0 8px 24px -12px rgba(20,25,40,.18);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 27px, color-mix(in srgb, var(--line) 55%, transparent) 28px),
+      repeating-linear-gradient(90deg, transparent, transparent 27px, color-mix(in srgb, var(--line) 55%, transparent) 28px),
+      var(--paper);
+    background-attachment: local;
+    color:var(--ink);
+    font: 15px/1.6 var(--font-body);
+    -webkit-font-smoothing:antialiased;
+    transition: background-color .2s ease, color .2s ease;
+  }
+  @media (prefers-reduced-motion: reduce){ *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;} }
+
+  a{color:var(--accent);}
+  h1,h2,h3,h4{font:var(--font-display); text-wrap:balance; margin:0 0 .5em; color:var(--ink);}
+  p{margin:0 0 1em; max-width:66ch;}
+  .eyebrow{
+    font:600 .72rem/1 var(--font-mono); text-transform:uppercase; letter-spacing:.09em;
+    color:var(--accent); display:block; margin-bottom:.6em;
+  }
+
+  button{font-family:var(--font-body); cursor:pointer;}
+  textarea{font-family:var(--font-body);}
+
+  .app-shell{
+    display:grid;
+    grid-template-columns: 236px minmax(0,1fr);
+    min-height:100vh;
+  }
+  @media (max-width: 860px){
+    .app-shell{ grid-template-columns: 1fr; }
+  }
+
+  /* ---------- sidebar nav ---------- */
+  .sidenav{
+    border-right:1px solid var(--line);
+    padding:22px 16px;
+    position:sticky; top:0; align-self:start; height:100vh; overflow-y:auto;
+    background: color-mix(in srgb, var(--paper) 88%, var(--paper-sunk));
+  }
+  @media (max-width:860px){
+    .sidenav{
+      position:sticky; top:0; height:auto; z-index:20;
+      display:flex; overflow-x:auto; overflow-y:hidden; gap:6px;
+      padding:10px 12px; border-right:none; border-bottom:1px solid var(--line);
+      background: color-mix(in srgb, var(--paper) 92%, var(--paper-sunk));
+    }
+  }
+  .brand{
+    font:var(--font-display); font-size:1.02rem; line-height:1.25; margin-bottom:4px;
+    display:flex; align-items:baseline; gap:.4em;
+  }
+  .brand small{font:400 .68rem var(--font-mono); color:var(--ink-faint); text-transform:uppercase; letter-spacing:.08em; display:block; margin-bottom:14px;}
+  @media (max-width:860px){ .brand, .brand + small{display:none;} }
+
+  .navlist{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:2px;}
+  @media (max-width:860px){ .navlist{flex-direction:row; flex-shrink:0;} }
+  .navlist button{
+    all:unset; display:flex; align-items:center; gap:.55em;
+    padding:8px 10px; border-radius:var(--radius); font-size:.86rem; color:var(--ink-soft);
+    white-space:nowrap;
+  }
+  .navlist button:hover{ background:var(--paper-raised); color:var(--ink); }
+  .navlist button:focus-visible{ outline:2px solid var(--accent); outline-offset:1px; }
+  .navlist button.active{ background:var(--paper-raised); color:var(--ink); font-weight:600; box-shadow: inset 3px 0 0 var(--accent); }
+  .navlist .navdot{ width:8px; height:8px; border-radius:50%; background:var(--nav-dot, var(--ink-faint)); flex:none; }
+  .navlist li[data-case] button.active .navdot,
+  .navlist li[data-case] button:hover .navdot{ background:var(--nav-dot); }
+
+  .nav-divider{ height:1px; background:var(--line); margin:12px 2px; }
+  @media (max-width:860px){ .nav-divider{ width:1px; height:auto; align-self:stretch; margin:2px 4px;} }
+
+  .progress-pill{
+    margin-top:16px; padding:10px 12px; border:1px solid var(--line); border-radius:var(--radius);
+    font-size:.74rem; color:var(--ink-soft); background:var(--paper-raised);
+  }
+  @media (max-width:860px){ .progress-pill{display:none;} }
+  .progress-pill strong{ color:var(--ink); font-variant-numeric:tabular-nums; }
+  .progress-track{ height:5px; border-radius:4px; background:var(--paper-sunk); margin-top:6px; overflow:hidden; }
+  .progress-fill{ height:100%; background:var(--accent); transition:width .3s ease; }
+
+  /* ---------- main content ---------- */
+  main{ padding: 40px clamp(20px, 4vw, 64px) 100px; min-width:0; }
+  .page{ max-width:760px; }
+  .page.wide{ max-width:920px; }
+
+  .tag-row{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:1.2em; }
+  .tag{
+    font:600 .72rem/1 var(--font-mono); text-transform:uppercase; letter-spacing:.05em;
+    padding:5px 9px; border-radius:2px; border:1px solid var(--line-strong);
+    color:var(--ink-soft); background:var(--paper-raised);
+  }
+
+  .case-hero{
+    display:flex; gap:20px; align-items:flex-start; margin-bottom:1.6em;
+    padding-bottom:1.6em; border-bottom:1px solid var(--line);
+  }
+  .case-icon{
+    flex:none; width:58px; height:58px; border-radius:50%;
+    background: color-mix(in srgb, var(--accent) 16%, var(--paper-raised));
+    border:1px solid color-mix(in srgb, var(--accent) 45%, var(--line));
+    display:flex; align-items:center; justify-content:center;
+  }
+  .case-icon svg{ width:30px; height:30px; stroke:var(--accent); fill:none; }
+  .case-hero h1{ font-size:clamp(1.7rem,3.4vw,2.3rem); margin-bottom:.15em; }
+  .case-hero .descriptor{ color:var(--ink-soft); margin-bottom:.7em; font-size:.95rem; }
+
+  blockquote.voice{
+    font:var(--font-voice); font-size:1.18rem; line-height:1.5; color:var(--ink);
+    margin: 1.3em 0; padding: 0 0 0 1.1em; border-left:3px solid var(--accent);
+    max-width:60ch;
+  }
+  blockquote.voice cite{
+    display:block; font:600 .72rem var(--font-mono); font-style:normal; text-transform:uppercase;
+    letter-spacing:.05em; color:var(--ink-faint); margin-top:.5em;
+  }
+
+  section.block{ margin-bottom:2.4em; }
+  section.block > h2{ font-size:1.32rem; margin-bottom:.7em; }
+  section.block > h2 .num{ color:var(--accent); font-family:var(--font-mono); font-weight:700; margin-right:.4em; }
+
+  details.acc{
+    border:1px solid var(--line); border-radius:var(--radius); background:var(--paper-raised);
+    margin-bottom:10px; overflow:hidden;
+  }
+  details.acc > summary{
+    list-style:none; cursor:pointer; padding:13px 16px; font-weight:700; font-size:.98rem;
+    display:flex; align-items:center; justify-content:space-between; gap:1em;
+  }
+  details.acc > summary::-webkit-details-marker{ display:none; }
+  details.acc > summary::after{
+    content:"+"; font-family:var(--font-mono); color:var(--accent); font-size:1.1rem; flex:none;
+  }
+  details.acc[open] > summary::after{ content:"–"; }
+  details.acc .acc-body{ padding:0 16px 16px; color:var(--ink-soft); }
+  details.acc .acc-body p:last-child{ margin-bottom:0; }
+
+  /* timeline */
+  .timeline{ display:flex; flex-direction:column; border-left:2px solid var(--line); margin:1.4em 0 0 6px; padding-left:22px; }
+  .tl-node{ position:relative; padding-bottom:20px; }
+  .tl-node:last-child{ padding-bottom:0; }
+  .tl-node::before{
+    content:""; position:absolute; left:-27.5px; top:3px; width:11px; height:11px; border-radius:50%;
+    background:var(--paper); border:2px solid var(--accent);
+  }
+  .tl-node button.tl-toggle{
+    all:unset; cursor:pointer; display:block; width:100%;
+  }
+  .tl-when{ font:600 .7rem var(--font-mono); text-transform:uppercase; letter-spacing:.06em; color:var(--accent); }
+  .tl-title{ font-weight:700; margin:.15em 0; font-size:.98rem; }
+  .tl-hint{ font-size:.78rem; color:var(--ink-faint); }
+  .tl-detail{ display:none; color:var(--ink-soft); font-size:.92rem; margin-top:.5em; max-width:58ch; }
+  .tl-node.open .tl-detail{ display:block; }
+  .tl-node.open .tl-hint{ display:none; }
+
+  /* reveal quote analysis */
+  .reveal-btn{
+    all:unset; cursor:pointer; font:600 .78rem var(--font-mono); text-transform:uppercase; letter-spacing:.04em;
+    color:var(--accent); border-bottom:1px dashed var(--accent); padding-bottom:1px;
+  }
+  .reveal-panel{ display:none; margin-top:.7em; padding:12px 14px; background:var(--paper-sunk); border-radius:var(--radius); color:var(--ink-soft); font-size:.92rem; }
+  .reveal-panel.open{ display:block; }
+
+  /* support cards */
+  .support-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(230px,1fr)); gap:12px; margin-top:1em; }
+  .support-card{
+    border:1px solid var(--line); border-top:3px solid var(--accent); border-radius:var(--radius);
+    background:var(--paper-raised); padding:14px 15px; box-shadow:var(--shadow);
+  }
+  .support-card h4{ font-size:.92rem; margin-bottom:.4em; }
+  .support-card p{ font-size:.85rem; color:var(--ink-soft); margin-bottom:.7em; }
+  .try-check{ display:flex; align-items:center; gap:.5em; font:600 .72rem var(--font-mono); text-transform:uppercase; letter-spacing:.04em; color:var(--ink-faint); }
+  .try-check input{ accent-color:var(--accent); width:14px; height:14px; }
+  .try-check.checked{ color:var(--accent); }
+
+  /* pancake / layer visual for Christopher */
+  .layers{ display:flex; flex-direction:column-reverse; gap:6px; max-width:340px; margin:1em 0; }
+  .layer{ padding:9px 12px; border-radius:2px; font-size:.82rem; border:1px solid var(--line); background:var(--paper-raised); }
+  .layer b{ font-family:var(--font-mono); color:var(--accent); margin-right:.5em; }
+  .pin-legend{ display:flex; gap:16px; margin:.6em 0 1.2em; font-size:.82rem; }
+  .pin-legend span{ display:inline-flex; align-items:center; gap:.4em; }
+  .pin-dot{ width:10px; height:10px; border-radius:50%; display:inline-block; }
+
+  /* tape swatch for AD */
+  .tape-strip{
+    height:20px; border-radius:2px; margin:1.2em 0;
+    background: repeating-linear-gradient(90deg,
+      #d9662b 0 12%, #e0a63a 12% 24%, #d7c542 24% 36%, #4f9e6a 36% 48%,
+      #3d7fb0 48% 60%, #4a5aa8 60% 72%, #8a5aa8 72% 84%, #d9662b 84% 100%);
+    opacity:.85;
+  }
+
+  /* quote grid for cross-case + generic callouts */
+  .callout{
+    border:1px solid var(--line); border-left:3px solid var(--accent); background:var(--paper-raised);
+    border-radius:var(--radius); padding:16px 18px; margin:1.2em 0;
+  }
+  .callout h4{ font-size:.9rem; margin-bottom:.4em; }
+  .callout p:last-child{ margin-bottom:0; }
+
+  ul.plain{ margin:0 0 1em; padding-left:1.2em; }
+  ul.plain li{ margin-bottom:.5em; color:var(--ink-soft); max-width:60ch; }
+  ul.plain li::marker{ color:var(--accent); }
+
+  .commit-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; margin:1.2em 0; }
+  .commit-card{ border:1px solid var(--line); border-radius:var(--radius); background:var(--paper-raised); padding:16px; }
+  .commit-card .eyebrow{ margin-bottom:.4em; }
+  .commit-card p{ font-size:.88rem; color:var(--ink-soft); margin:0; }
+
+  .home-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:1.6em 0; }
+  @media (max-width:700px){ .home-grid{grid-template-columns:1fr;} }
+  .home-card{
+    all:unset; cursor:pointer; display:block; border:1px solid var(--line); border-radius:var(--radius);
+    background:var(--paper-raised); padding:18px; box-shadow:var(--shadow);
+    --nav-dot:inherit;
+  }
+  .home-card:hover{ border-color:var(--case-accent, var(--accent)); }
+  .home-card .dot{ width:10px; height:10px; border-radius:50%; background:var(--case-accent); margin-bottom:10px; }
+  .home-card h3{ font-size:1.05rem; margin-bottom:.3em; }
+  .home-card p{ font-size:.85rem; color:var(--ink-soft); margin:0; }
+
+  .steps{ counter-reset:step; display:grid; gap:10px; margin:1.4em 0; }
+  .step{ display:flex; gap:14px; align-items:flex-start; }
+  .step .n{
+    flex:none; width:26px; height:26px; border-radius:50%; background:var(--accent); color:var(--accent-ink);
+    display:flex; align-items:center; justify-content:center; font:700 .82rem var(--font-mono);
+  }
+  .step p{ margin:0; font-size:.9rem; color:var(--ink-soft); }
+  .step strong{ color:var(--ink); }
+
+  /* reflection */
+  .field-label{ display:block; font:700 .8rem var(--font-mono); text-transform:uppercase; letter-spacing:.04em; color:var(--ink-faint); margin-bottom:6px; }
+  .text-input{
+    width:100%; padding:9px 11px; border:1px solid var(--line-strong); border-radius:var(--radius);
+    background:var(--paper-raised); color:var(--ink); font-size:.92rem;
+  }
+  .reflect-card{ border:1px solid var(--line); border-radius:var(--radius); background:var(--paper-raised); padding:18px 20px; margin-bottom:16px; }
+  .reflect-card .prompt{ font-size:.95rem; margin-bottom:.9em; max-width:64ch; }
+  .reflect-card .prompt .src{ display:block; margin-top:.3em; font:600 .7rem var(--font-mono); text-transform:uppercase; letter-spacing:.04em; color:var(--accent); }
+  textarea.reflect-box{
+    width:100%; min-height:110px; resize:vertical; padding:10px 12px; border:1px solid var(--line-strong);
+    border-radius:var(--radius); background:var(--paper); color:var(--ink); font-size:.9rem; line-height:1.55;
+  }
+  textarea.reflect-box:focus, .text-input:focus{ outline:2px solid var(--accent); outline-offset:1px; }
+  .wc{ text-align:right; font:600 .7rem var(--font-mono); color:var(--ink-faint); margin-top:4px; }
+
+  .portfolio-bar{
+    position:sticky; bottom:0; margin-top:24px; padding:14px 18px; background:var(--paper-raised);
+    border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow);
+    display:flex; flex-wrap:wrap; gap:10px; align-items:center;
+  }
+  .btn{
+    border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink);
+    padding:9px 15px; border-radius:var(--radius); font-size:.85rem; font-weight:600;
+  }
+  .btn:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn.primary{ background:var(--accent); color:var(--accent-ink); border-color:var(--accent); }
+  .btn.primary:hover{ filter:brightness(1.06); color:var(--accent-ink); }
+  .save-status{ font:600 .72rem var(--font-mono); color:var(--ink-faint); margin-left:auto; }
+
+  .note{ font-size:.82rem; color:var(--ink-faint); border-top:1px dashed var(--line); padding-top:12px; margin-top:18px; }
+
+  footer.credit{ max-width:760px; margin-top:60px; padding-top:20px; border-top:1px solid var(--line); font-size:.78rem; color:var(--ink-faint); }
+
+  /* print */
+  @media print{
+    body{ background:#fff !important; }
+    .sidenav, .portfolio-bar, .try-check, .reveal-btn, .tl-hint, details.acc > summary::after, .nav-divider{ display:none !important; }
+    .app-shell{ display:block; }
+    main{ padding:0; }
+    details.acc{ border:none; page-break-inside:avoid; }
+    details.acc .acc-body{ display:block !important; }
+    .page{ max-width:100%; }
+    a{ color:#000; }
+    .print-cover{ display:block !important; page-break-after:always; }
+  }
+  .print-cover{ display:none; }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <nav class="sidenav" aria-label="Sections">
+    <div class="brand">🔬 Counternarratives</div>
+    <small>Science &amp; the Culture of Power</small>
+    <ul class="navlist" id="navlist"></ul>
+  </nav>
+  <main>
+    <div class="page wide" id="app"></div>
+  </main>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ================= DATA ================= */
+
+  var CASES = [
+    {
+      id:"ad", name:"AD", age:14, pronouns:"she/her",
+      descriptor:"14, Black and Latinx — maker, poet, YouTuber, self-taught electrical engineer",
+      accentLight:"#c15a1f", accentDark:"#f0854a",
+      icon:"tape",
+      quote:"I want to say my name is AD. I am my “super me” because I am my alter ego… I try to connect my experiences from school, or sometimes what I learn, with bigger messages.",
+      quoteSource:"AD, opening vignette",
+      identity:[
+        "AD calls herself her own “super me” — an alter ego she built to hold together the struggles of school, home, and community alongside her identity as a maker, poet, and scientist-engineer. Before she ever joined the after-school green energy club, her peers already recognized her as “the duct-tape maker”: she had already made a duct-tape wallet, a phone charger she decorated herself, and a reversible hat she gave away for free.",
+        "Central to how AD understands herself is the idea of <em>evolution</em> — not the textbook definition, but a personal one. “Anything can evolve,” she says, “so why can't youth be viewed as evolving?” She connects her own becoming to Lucy, the early hominid she studied very differently in History class (as a full human story of survival and knowledge-sharing) than in Biology class (as a mechanism of natural selection). For AD, the humanizing version is the one that matters."
+      ],
+      timeline:[
+        {when:"Early childhood", title:"A father's illness changes everything", text:"AD's father, the family's sole provider, was hospitalized for an unexpected respiratory illness and lost his “white collar” job because he could not call in during his hospital stay. Combined with the 2008 recession's toll on Great Lakes City, the family's move to a lower-income, more heavily policed neighborhood limited AD's transportation, extracurriculars, and time with siblings."},
+        {when:"2014, community survey", title:"Ebola fears surface in her neighborhood", text:"When the green energy club surveyed 60 community members about safety, one answer — fear of Ebola — stood out to AD. It echoed her father's illness. She wanted a solution that was “cool, stylish, and helps people be and stay healthy.”"},
+        {when:"After-school club", title:"Designing the duct-tape thermometer tie", text:"AD set out to build a wearable, colorful (“ROYGBIV, not black & white”) necktie with a built-in heat sensor that would change color like a weather map, so people could notice a fever early."},
+        {when:"Mid-build", title:"Hitting the coding wall", text:"Her plan called for an Arduino LilyPad she would code herself. She could not code it alone and leaned on Pedro, an undergraduate engineering mentor. She later swapped in a pre-coded Littlebits sensor — a real design compromise, not a failure."},
+        {when:"After the club", title:"Coconut-oil products and teaching her community", text:"AD began making her own soaps, lotions, and hair products from coconut oil as an affordable, natural alternative to expensive brands like Shea Moisture, then taught the process to her community through YouTube and Facebook Live."},
+        {when:"Middle school → high school", title:"Naming the mismatch", text:"As she moved into high school, AD described feeling like she had “the life of a robot… programmed to have this life” — stacks of disconnected homework in place of the hands-on, meaningful work she wanted."}
+      ],
+      invention:{
+        name:"The Duct-Tape Thermometer Tie",
+        summary:"A stylish, brightly colored necktie built from duct tape with an embedded temperature sensor that changes color with body heat — modeled after the color-coded maps on TV weather forecasts — designed to help people notice illness early, the way AD wished someone could have caught her father's."
+      },
+      counternarratives:[
+        {
+          quote:"If there was no Pedro, there would be no tie… [but] the Lilypad is also making me have to connect wires… so if it wasn't for that I don't think I would be an [electrical] engineer. There's a bunch of different forms of engineering.",
+          source:"AD, mid-artifact interview",
+          analysis:"AD credits her mentor's expertise honestly, while still claiming her own place in engineering. She refuses a version of “who counts as an engineer” that would erase her contribution just because someone else knew the code. She also names, directly, that her school never taught coding — something nearby wealthier districts hold competitions for."
+        },
+        {
+          quote:"I am assigned more book work… I want to make things for my people, not learn meaningless things.",
+          source:"AD, Weebly page “My Invention”",
+          analysis:"AD is explicit that worksheet-driven science feels disconnected from anything she cares about. Her ask is not for less rigor — it's for science that is hands-on, creative, and pointed at real people."
+        },
+        {
+          quote:"Companies like Shea [Moisture]… they are so expensive, and I just can't. I want to make my own products and less expensive.",
+          source:"AD, interview",
+          analysis:"AD connects chemistry and material science directly to economic justice: companies marketed toward Black communities can still extract wealth from them. Making her own products was a scientific and political act at once."
+        }
+      ],
+      support:[
+        {h:"Treat outside-of-school expertise as real expertise", t:"AD was a recognized duct-tape maker before she ever entered the club. Ask what your students already make, fix, or build outside class — and design an early assignment that lets them lead with it."},
+        {h:"Teach the technical skills you assume, explicitly", t:"AD named coding and typing as barriers her school never addressed, while nearby affluent schools ran competitions on them. Audit your unit for assumed digital skills and teach them on purpose."},
+        {h:"Make room for hands-on, personally meaningful work", t:"Trade a fraction of worksheet time for open-ended design or maker challenges connected to students' own communities and questions."},
+        {h:"Let students process science through writing and art, too", t:"AD turned to poetry when duct-tape making felt reduced to a performance for others. Multimodal reflection (poems, videos, zines) can carry meaning that a lab report can't."},
+        {h:"Connect content across subjects without flattening it", t:"AD noticed Lucy was humanized in History but reduced to a mechanism in Biology. Look for places in your curriculum where a cross-subject topic could be taught with more of its human story intact."},
+        {h:"Build scientific and consumer literacy together", t:"Help students critically read product claims, pricing, and marketing aimed at their own communities — chemistry and economics are not separate questions for students living the cost."}
+      ],
+      reflection:[
+        {id:"ad1", prompt:"AD says school science made her feel like she had “the life of a robot… programmed.” Where have you seen (or experienced) science taught as transmission rather than as a space to notice and wonder? What is one specific thing you would change about that lesson or unit?"},
+        {id:"ad2", prompt:"Name one piece of outside-of-school expertise a future student of yours might bring into your classroom (a craft, a hustle, a repair skill, a creative practice). Describe one concrete way you could invite that expertise into a science or engineering unit — not as an add-on, but as the starting point."}
+      ]
+    },
+    {
+      id:"faith", name:"Faith", age:14, pronouns:"she/her",
+      descriptor:"14, Black — self-described “engineer and psychologist,” imagination creator",
+      accentLight:"#a5790a", accentDark:"#e6b93c",
+      icon:"sun",
+      quote:"I really think I create things with my imagination — if we don't use our imagination, then how can we make up new ideas?",
+      quoteSource:"Faith, interview",
+      identity:[
+        "Faith names herself an “engineer and psychologist” and, on her Weebly page, an “imagination creator.” Both identities show up in her invention: a technical solar-and-fan device built to solve an emotional and cultural problem — keeping her community's Grandmothers comfortable, safe, and proud in the church hats that matter to them.",
+        "Faith's science identity is deeply relational. She thinks in terms of who a design is <em>for</em> — her Grandmother in Florida, the Grandmothers at her Great Lakes City church, her track teammates getting sunburned, her mother facing racism at work. Being an engineer, for Faith, means being answerable to those people first."
+      ],
+      timeline:[
+        {when:"2012 field trip", title:"The solar panel house", text:"A green-energy club field trip to Michigan's only solar-powered house showed Faith that harnessed sunlight could power an entire home. She went home and convinced her father to buy rechargeable batteries for her brothers' Wii remotes."},
+        {when:"Design begins", title:"Grandmother's church hat", text:"Faith kept picturing her Grandmother removing her elaborate church hat in an un-air-conditioned Florida church because she was “hot and sweaty all the time.” Church hats, she explains, are a cultural-historical symbol of resistance and uplift for the women in her community — not a costume."},
+        {when:"Material search", title:"Propeller hat, winter hat, baseball cap", text:"Faith tried a novelty propeller hat from her mother's theater production (airflow hit the wrong direction), then her only furry winter hat (too costly to sacrifice), before settling on a baseball cap after watching YouTube tutorials."},
+        {when:"Brim decision", title:"Flat brim vs. curved brim", text:"A flat brim was more stable for the fan, but curved brims were what Grandmothers' grandchildren actually wore in her community. Faith chose a curved Michigan State cap — style and cultural fit mattered as much as engineering stability."},
+        {when:"Testing", title:"Solar panel size vs. style", text:"A bigger solar panel produced more voltage to spin the fan reliably, but looked bulky on the curved brim. Faith weighed function against wearability and documented the trade-off rather than treating one “correct” answer as given."},
+        {when:"Case co-construction", title:"Crossing out the NASA cycle", text:"When asked to map her process onto the standard NASA engineering design cycle used in the club, Faith found it erased community knowledge entirely. She literally crossed it out in her multimodal case and authored her own, community-centered design cycle instead."},
+        {when:"After the club", title:"Naming “Psychoengineering”", text:"Working with her mother — the only Black public-health professional at her workplace, targeted by white coworkers — Faith began merging engineering/making with therapeutic practice, coining the term Psychoengineering for tools that help people process feelings, not just solve technical problems."}
+      ],
+      invention:{
+        name:"The FANcy Hat",
+        summary:"A baseball cap fitted with a small fan powered by a solar panel, designed so Grandmothers (and anyone else) could stay cool, keep their culturally significant hats on, and avoid dangerous sun exposure — all without sacrificing style."
+      },
+      counternarratives:[
+        {
+          quote:"A lot of elderly women are stylish, and the hats are an important part of who they are, but at the same time it is difficult for them to keep cool during the church service.",
+          source:"Faith, “About Me,” Weebly page",
+          analysis:"Faith refuses to treat style and function as opposites. Her design logic insists that dignity and cultural identity are legitimate engineering requirements, not decoration layered on top of the “real” solution."
+        },
+        {
+          quote:"Blacks have higher rates of death due to skin cancer than other groups, and… people think because we have more chemicals in our skin, we are more protected.",
+          source:"Faith, interview",
+          analysis:"Faith identifies a specific piece of health misinformation harming her community and builds her invention, in part, as a corrective — turning her hat into an educational tool about sun exposure, not just a comfort device."
+        },
+        {
+          quote:"[The NASA cycle] washes over the real [process]… I don't think it's a fair representation of how engineers actually design.",
+          source:"Faith, case interview (paraphrased from field notes)",
+          analysis:"Faith's critique targets the idea that one standardized design process fits everyone. She argues that erasing community context from an engineering method is itself a political choice, not a neutral one."
+        }
+      ],
+      support:[
+        {h:"Don't treat one design process as neutral or universal", t:"Faith rejected the standardized NASA cycle because it erased her community's needs. Invite students to adapt, annotate, or replace standard frameworks (design cycles, lab formats, rubrics) so their own context has a place in it."},
+        {h:"Let family and community stories be the starting point for a unit", t:"Faith's Grandmother's church experience — not a textbook prompt — generated real engineering constraints (heat, airflow, cultural symbolism, cost). Build in a step where students must interview a family or community member before they design anything."},
+        {h:"Treat style, dignity, and cultural fit as engineering criteria", t:"Faith's brim decision balanced stability against what her community actually wears. Make “will people in this community actually want to use it” an explicit, graded design constraint."},
+        {h:"Teach health and environmental science through community relevance", t:"Faith's hat became a vehicle for correcting misinformation about skin cancer in her community. Connect science content (UV radiation, climate, health) to problems students already worry about at home."},
+        {h:"Make space for interdisciplinary identities", t:"Faith is an engineer <em>and</em> a psychologist. Don't force students to choose one STEM identity — build assignments that let technical and human-centered goals coexist, like her Psychoengineering."},
+        {h:"Model humility about whose knowledge counts", t:"Be willing to critique curricula and “expert” processes alongside your students, out loud, rather than presenting them as settled and beyond question."}
+      ],
+      reflection:[
+        {id:"faith1", prompt:"Faith rejected the standardized NASA design cycle and built her own. What is one “settled” routine, rubric, or process in science/engineering instruction that you've been taught to treat as a given? How might you invite students to question or adapt it?"},
+        {id:"faith2", prompt:"Psychoengineering merged Faith's technical skill with care for her mother's emotional wellbeing. How might you make room in a science classroom for students to connect technical work to emotional, relational, or care-based goals — without treating that connection as off-topic?"}
+      ]
+    },
+    {
+      id:"christopher", name:"Christopher", age:13, pronouns:"he/him",
+      descriptor:"13, Black — self-described “inventor and destroyer,” avid technologist",
+      accentLight:"#1f7a72", accentDark:"#35b3a8",
+      icon:"pin",
+      quote:"Helping is loving someone else in the heart, because helping is very important in making the world a better place to live in community.",
+      quoteSource:"Christopher, Weebly introduction",
+      identity:[
+        "Christopher describes himself as both an “inventor and a destroyer” — inventing tools to help his community while wanting to destroy the act of bullying and the frustration it leaves behind. Outside of school, he already worked on smartphone and computer applications with his Big Brother mentor, expertise no teacher had asked about or built on.",
+        "Authorship, for Christopher, is collective. In his multimodal case he goes out of his way to credit friends and community members for SUSU, insisting the app “was made by [Christopher] and friends” — a direct rejection of the individualized-achievement model that usually governs how STEM work gets credited in school."
+      ],
+      timeline:[
+        {when:"5th grade", title:"Bullied, then punished for reporting it", text:"After being bullied online and then in person, Christopher told his teacher — who publicly disciplined the aggressor. The public handling triggered retaliation, and Christopher was bullied further by the same student and others."},
+        {when:"Ongoing", title:"A friend's suicide", text:"A peer from the after-school program took his own life as a result of bullying. Christopher describes this loss as central to why he needed to “take an action instead of a reaction.”"},
+        {when:"Survey phase", title:"Community members can't name the intersections", text:"Christopher's first survey (n=15) asked where people had been bullied. Most couldn't name exact street intersections — but could describe locations precisely by proximity to a corner store, a church, or a school. Their geographic knowledge was real, just organized differently than a street map assumes."},
+        {when:"Design pivot", title:"“Granny” teaches him to use map pins", text:"A community elder, Granny, couldn't recall intersections but could point to a location on a Google Map. Watching her drop a pin showed Christopher a data-collection method built around how his community actually knows its own streets."},
+        {when:"Building SUSU", title:"Four “pancake” layers of data", text:"Christopher layered a community survey, GIS map pins, public crime-map data, and real-time crowdsourced reports into a single app — color-coding pins red for physical abuse and green for verbal abuse."},
+        {when:"SUSU 2.0", title:"BullyNET and a counter-use of social media", text:"Christopher added a positive-messaging wall, a live GPS locator, and a link to StopBullying.gov — explicitly designing his app as a counternarrative to how platforms like Facebook and Twitter get used to spread harm."}
+      ],
+      invention:{
+        name:"SUSU — Speak Up Step Up",
+        summary:"A smartphone app that layers a community survey, crowdsourced GPS/GIS map pins, public crime data, and real-time reports to make patterns of bullying in Great Lakes City visible — paired with a positive-messaging wall (BullyNET) built as a direct counter to how social media gets used to spread harm."
+      },
+      counternarratives:[
+        {
+          quote:"This app was made by [Christopher] and friends… My dream is to become a successful person and run my own business.",
+          source:"Christopher, “The Behind the Scenes Look,” Weebly page",
+          analysis:"Christopher insists on shared authorship in a system (school, and often STEM more broadly) that usually rewards individual achievement. Naming his friends as co-creators is itself a counternarrative about how credit should work in science and engineering."
+        },
+        {
+          quote:"If there was crime, then there had to be bullying there too.",
+          source:"A community member, quoted by Christopher during member-checking",
+          analysis:"Christopher's data revealed that community members connected bullying to broader narratives about crime, segregation, and disinvestment by neighborhood. His “engineering data” surfaced structural racism, not just app-usable coordinates."
+        },
+        {
+          quote:"[Taking] an action instead of a reaction… something is being done with and for others.",
+          source:"Christopher, interview",
+          analysis:"Christopher distinguishes between individualized retaliation and collective, designed response. His app is that philosophy built into software — turning a personal survival strategy into public infrastructure."
+        }
+      ],
+      support:[
+        {h:"Broaden what counts as engineering data", t:"Christopher treated surveys, GPS pins, public crime records, and lived testimony as legitimate scientific data. Make room for community ethnography — interviews, mapping, crowdsourcing — as real data collection in your classroom, not just a warm-up activity."},
+        {h:"Don't separate social-emotional life from science class", t:"Bullying, and a teacher's mishandling of it, directly shaped Christopher's relationship to school STEM. Build explicit space to address classroom social dynamics rather than treating them as someone else's problem."},
+        {h:"Assess and credit group knowledge-building, not just individual output", t:"Christopher fought to have his friends and community credited as co-creators of SUSU. Design at least one major assessment around documented collective authorship rather than individual grades alone."},
+        {h:"Ground technology instruction in local, lived geography", t:"Christopher's GIS work started from how his community actually names places, not from an abstract map. Use students' own neighborhoods, routes, and landmarks as the dataset for a technology or data-science unit."},
+        {h:"Name and challenge gendered expectations in STEM classrooms", t:"Christopher noticed boys' bullying and emotional needs were addressed less than girls'. Make explicit room for care, compassion, and vulnerability among boys and young men in your classroom culture."},
+        {h:"Let students target root problems, not just build gadgets", t:"SUSU exists because Christopher wanted to end bullying, not because he wanted to build an app. Start design units from a problem students genuinely want gone, and let the technology follow."}
+      ],
+      reflection:[
+        {id:"chris1", prompt:"Christopher insisted SUSU was built with his community, not by him alone. How do the grading and assessment practices you've experienced handle group knowledge-building versus individual achievement? Describe one way you could assess collective authorship fairly."},
+        {id:"chris2", prompt:"Christopher expanded what counted as engineering data (surveys, GPS pins, crime-map data, lived experience) to investigate bullying. Name a social or emotional issue your future students might care about that could become the basis for a real, data-rich science or engineering investigation."}
+      ]
+    }
+  ];
+
+  var CROSSCASE = {
+    intro:"Christina Restrepo Nazar's cross-case analysis of AD, Faith, and Christopher surfaces two connected claims. Read them not as findings about three unusual kids, but as evidence about what becomes possible when science and engineering learning starts from community.",
+    claims:[
+      {
+        title:"Claim 1 — Community-based counternarratives sharpened their critique of school STEM",
+        text:"In all three cases, generating counternarratives of doing science and engineering through community in the after-school program made the youth more critical of their school STEM experiences — and opened new, hybrid ways of working that pulled together family, community, and other pursuits. AD centered affordable, community-legitimate materials (duct tape) as real engineering resources. Faith refused a one-size-fits-all design process. Christopher redefined what counts as engineering data. Each critique reached beyond the invention itself, into how school science treats resources, credit, and whose knowledge is settled science."
+      },
+      {
+        title:"Claim 2 — Their digital, multimodal cases were built to teach others",
+        text:"AD, Faith, and Christopher didn't just make inventions — they authored public, digital, multimodal cases (Weebly sites, video, poetry, live-streamed tutorials) specifically to teach meaningful others — teachers, PSTs, community members — about the culture of power in science. The act of naming their own websites (“Something So Small Can Become So Big,” “Imagination Creator,” “Speak Up Step Up”) was itself pedagogy: a deliberate move to make their counternarratives accessible and actionable for the adults who would shape the next student like them."
+      }
+    ],
+    commitments:[
+      {t:"Ask “what science, and for whom?”", d:"Before planning content coverage, ask who in the room is and isn't seeing themselves and their community reflected as legitimate scientific knowers."},
+      {t:"Treat youth as evolving, not fixed", d:"AD's whole framework was ontological becoming. Avoid locking students into a single “level” or track based on where they start."},
+      {t:"Broaden what counts as material, data, and process", d:"Duct tape, GPS pins, survey data, and community stories are legitimate scientific and engineering resources — not workarounds for “real” equipment."},
+      {t:"Center community, not just the individual designer", d:"All three youth measured success by whether their community could use and shape the invention — not by individual achievement alone."},
+      {t:"Make space for care and multimodal expression", d:"Poetry, video, live-streams, and emotional processing (Psychoengineering) were how these youth made sense of technical work — not distractions from it."},
+      {t:"Build long-term, trust-based relationships", d:"These counternarratives emerged over years of relationship — home visits, shared vulnerability, and co-authorship — not a single interview or unit."}
+    ]
+  };
+
+  var DH = {
+    what:[
+      "Digital humanities (DH) is a field that brings computational and digital tools — mapping, multimodal storytelling, digital archiving, data visualization — into conversation with humanities questions about culture, power, narrative, and lived experience. In its critical, community-engaged strands, DH treats storytelling, oral history, and digital authorship by marginalized communities as legitimate scholarship, not just illustration of scholarship done elsewhere."
+    ],
+    why:[
+      {t:"Multimodal digital storytelling as primary data", d:"AD, Faith, and Christopher's Weebly e-portfolios, YouTube videos, and Facebook Live streams weren't supplementary — they were the primary way the youth authored and communicated their science identities. That is a core digital-humanities method: multimodal composition as knowledge-making."},
+      {t:"Counternarrative and testimony as data", d:"Grounding the study in Critical Race Theory's centrality of experiential knowledge treats youth testimony the way oral history and critical DH treat community narrative: as evidence, not anecdote."},
+      {t:"Critical making and craft as scholarship", d:"AD's poetry, Faith's community-centered design cycle, and Christopher's “pancake” data layers are creative, humanities-inflected acts of meaning-making built with digital and physical tools — exactly the hybrid that DH labels “critical making.”"},
+      {t:"Public-facing, community-engaged artifacts", d:"The youth's websites were built for public teaching and advocacy, not filed away as data. DH prizes exactly this kind of public scholarship — work that circulates back to the community it came from."},
+      {t:"This activity is itself a DH translation project", d:"Turning an academic case-study chapter into an interactive, multimodal, reflective experience for pre-service teachers is a small-scale digital humanities act: adapting scholarly narrative into a public, interactive digital form without losing its argument."}
+    ],
+    support:[
+      {group:"For teacher educators & methods courses", items:[
+        "Assign PSTs to build their own multimodal case studies of a student's science identity — modeled on this activity — using interviews, artifacts, and digital storytelling tools.",
+        "Bring critical/community-engaged digital methods (oral history, participatory archiving, digital ethnography) explicitly into science methods coursework, not just literacy or social studies methods.",
+        "Use e-portfolios and youth-authored digital cases as course texts alongside traditional research articles."
+      ]},
+      {group:"For institutions & funders", items:[
+        "Fund small joint grants or seed projects between science education faculty and digital humanities centers or English/history departments.",
+        "Support makerspaces and DH labs that deliberately pair humanities tools (digital storytelling platforms, mapping software, oral-history archives) with science and engineering equipment.",
+        "Recognize interactive digital cases, websites, and multimodal archives as legitimate scholarly and teaching products in tenure, promotion, and grant review — not just journal articles."
+      ]},
+      {group:"For researchers", items:[
+        "Build long-term, co-authorship relationships with youth participants (as this study did over years) rather than single-visit data collection.",
+        "Publish research findings back into public, accessible digital forms — interactive cases, community exhibits, open web pages — alongside traditional journal chapters.",
+        "Train graduate students in participatory and digital-humanities methods (digital storytelling, community mapping, oral history) as core science-education research tools."
+      ]},
+      {group:"For classrooms", items:[
+        "Have students build digital, multimodal portfolios of their own science and engineering work — video, maps, writing, art — not just lab reports.",
+        "Use community mapping tools to ground data-science or environmental-science units in students' own neighborhoods.",
+        "Invite students to co-author public-facing artifacts (a class website, a video series, a data map) meant for an audience beyond the teacher."
+      ]}
+    ],
+    reflectionId:"dh1",
+    reflectionPrompt:"This activity turned an academic case study into an interactive digital experience, using youths' own multimodal artifacts (video, maps, poetry, e-portfolios) as both data and pedagogy. Where do you see an opportunity — in your own school or teacher-preparation program — to use digital-humanities-style tools (digital storytelling, oral history, mapping, multimodal portfolios) to document and legitimize students' science learning?"
+  };
+
+  var SYNTH_PROMPT = {
+    id:"synth1",
+    prompt:"Across AD, Faith, and Christopher, what patterns do you see in how the culture of power showed up in their science and engineering learning — and in how they pushed back against it? Choose one commitment from this activity that you want to carry into your own teaching. Describe what it would look like in a specific lesson or unit you might actually teach."
+  };
+
+  var SOURCE_NOTE = "Adapted for pre-service teacher use from: Restrepo Nazar, C., & Calabrese Barton, A., “Youth Counternarratives of the Culture of Power in Science.” All names of youth in the source chapter are pseudonyms; quotations are drawn from their co-constructed multimodal case studies and interviews.";
+
+  /* ================= ICONS ================= */
+  var ICONS = {
+    tape:'<svg viewBox="0 0 24 24" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.6"/></svg>',
+    sun:'<svg viewBox="0 0 24 24" stroke-width="1.6"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5 5l2.1 2.1M16.9 16.9L19 19M19 5l-2.1 2.1M7.1 16.9L5 19"/></svg>',
+    pin:'<svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M12 21s7-7.2 7-12a7 7 0 1 0-14 0c0 4.8 7 12 7 12z"/><circle cx="12" cy="9" r="2.3"/></svg>',
+    home:'<svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/></svg>',
+    layers:'<svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M12 3l9 4.5-9 4.5-9-4.5L12 3z"/><path d="M3 12l9 4.5 9-4.5"/><path d="M3 16.5L12 21l9-4.5"/></svg>',
+    book:'<svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5v-17z"/><path d="M20 19H6.5A2.5 2.5 0 0 0 4 21.5"/></svg>',
+    pencil:'<svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M4 20l1-4.5L16 4.6a1.8 1.8 0 0 1 2.5 0l.9.9a1.8 1.8 0 0 1 0 2.5L8.5 19 4 20z"/></svg>'
+  };
+
+  /* ================= STATE / STORAGE ================= */
+  var STORE_PREFIX = "cnsci_v1_";
+  function saveVal(key, val){ try{ localStorage.setItem(STORE_PREFIX+key, val); }catch(e){} }
+  function loadVal(key){ try{ return localStorage.getItem(STORE_PREFIX+key); }catch(e){ return null; } }
+
+  var TABS = [
+    {id:"home", label:"Overview", icon:"home"},
+    {id:"ad", label:"AD", icon:"tape", accent:true},
+    {id:"faith", label:"Faith", icon:"sun", accent:true},
+    {id:"christopher", label:"Christopher", icon:"pin", accent:true},
+    {id:"cross", label:"Cross-Case Themes", icon:"layers"},
+    {id:"dh", label:"Digital Humanities", icon:"book"},
+    {id:"portfolio", label:"My Reflection Portfolio", icon:"pencil"}
+  ];
+
+  var current = "home";
+
+  function caseById(id){ for(var i=0;i<CASES.length;i++){ if(CASES[i].id===id) return CASES[i]; } return null; }
+
+  function isDarkMode(){
+    var t = document.documentElement.getAttribute("data-theme");
+    if(t==="dark") return true;
+    if(t==="light") return false;
+    return !!(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  }
+
+  function allSupportKeys(){
+    var keys=[];
+    CASES.forEach(function(c){ c.support.forEach(function(s,i){ keys.push(c.id+"_try_"+i); }); });
+    return keys;
+  }
+  function allReflectionIds(){
+    var ids=[];
+    CASES.forEach(function(c){ c.reflection.forEach(function(r){ ids.push(r.id); }); });
+    ids.push(SYNTH_PROMPT.id);
+    ids.push(DH.reflectionId);
+    return ids;
+  }
+
+  function setAccent(caseObj){
+    var root = document.documentElement;
+    if(caseObj){
+      root.style.setProperty("--case-accent-light", caseObj.accentLight);
+      root.style.setProperty("--case-accent-dark", caseObj.accentDark);
+    } else {
+      root.style.setProperty("--case-accent-light", "#3d5a80");
+      root.style.setProperty("--case-accent-dark", "#8fb0e0");
+    }
+  }
+
+  /* ================= NAV RENDER ================= */
+  function renderNav(){
+    var ul = document.getElementById("navlist");
+    ul.innerHTML = "";
+    TABS.forEach(function(t){
+      var li = document.createElement("li");
+      if(t.accent) li.setAttribute("data-case", t.id);
+      var accentColor = t.accent ? "var(--accent, #999)" : "";
+      var btn = document.createElement("button");
+      btn.className = (t.id===current ? "active" : "");
+      btn.setAttribute("data-tab", t.id);
+      var dotStyle = t.accent ? ' style="--nav-dot:'+ (isDarkMode() ? caseById(t.id).accentDark : caseById(t.id).accentLight) +'"' : "";
+      btn.innerHTML = '<span class="navdot"'+dotStyle+'></span><span>'+t.label+"</span>";
+      btn.addEventListener("click", function(){ goTo(t.id); });
+      li.appendChild(btn);
+      ul.appendChild(li);
+      if(t.id==="home" || t.id==="christopher"){
+        var div = document.createElement("li");
+        div.className="nav-divider-holder";
+        var hr = document.createElement("div");
+        hr.className="nav-divider";
+        div.appendChild(hr);
+        ul.appendChild(div);
+      }
+    });
+    var li2 = document.createElement("li");
+    var box = document.createElement("div");
+    box.className="progress-pill";
+    box.id="progressPill";
+    li2.appendChild(box);
+    ul.appendChild(li2);
+    updateProgress();
+  }
+
+  function updateProgress(){
+    var box = document.getElementById("progressPill");
+    if(!box) return;
+    var keys = allSupportKeys();
+    var done = keys.filter(function(k){ return loadVal(k)==="1"; }).length;
+    box.innerHTML = "Teaching moves tried<br><strong>"+done+" / "+keys.length+"</strong>" +
+      '<div class="progress-track"><div class="progress-fill" style="width:'+(Math.round(done/keys.length*100))+'%"></div></div>';
+  }
+
+  function goTo(id){
+    current = id;
+    var accentCase = (id==="ad"||id==="faith"||id==="christopher") ? caseById(id) : null;
+    setAccent(accentCase);
+    renderNav();
+    render();
+    window.scrollTo({top:0, behavior:"auto"});
+  }
+
+  /* ================= PAGE RENDERERS ================= */
+  function el(html){ var d=document.createElement("div"); d.innerHTML=html; return d; }
+
+  function renderHome(){
+    var html = '';
+    html += '<span class="eyebrow">An interactive activity for pre-service science teachers</span>';
+    html += '<h1>Meet the students behind the counternarratives</h1>';
+    html += '<p>AD, Faith, and Christopher each designed an invention in an after-school green energy program — and then spent years co-authoring digital, multimodal case studies about what that invention revealed about their lives, their science identities, and how the “culture of power” in science education worked on them. This activity invites you to meet all three, connect their stories to your own future classroom, write reflections as you go, and export a finished portfolio for credit.</p>';
+
+    html += '<div class="home-grid">';
+    CASES.forEach(function(c){
+      html += '<button class="home-card" data-case="'+c.id+'" style="--case-accent:'+c.accentLight+'">' +
+        '<div class="dot"></div><h3>'+c.name+'</h3><p>'+c.invention.name+' — '+c.descriptor+'</p></button>';
+    });
+    html += '</div>';
+
+    html += '<section class="block"><h2>How to use this activity</h2><div class="steps">' +
+      step(1,"Explore each case","Open AD, Faith, and Christopher's tabs. Expand the accordions, click through their timelines, and read their words in their own voice (set in italics).") +
+      step(2,"Connect to teaching","Each case ends with concrete, checkable moves for supporting that student's kind of science work. Check off the ones you want to try.") +
+      step(3,"Reflect as you go","Every case includes short reflection prompts. Your answers autosave in this browser and appear together in your Reflection Portfolio.") +
+      step(4,"Export your portfolio","When you're done, visit “My Reflection Portfolio” to add your name, review your answers, and export a clean PDF to submit for credit.") +
+      '</div></section>';
+
+    html += '<section class="block"><h2>Why this matters for science teaching</h2><p>These three cases argue that minoritized youth already know how the culture of power operates in science classrooms — what counts as legitimate knowledge, whose materials and processes are treated as “science,” and who gets credited for scientific work. Their counternarratives are not complaints; they are, the researcher argues, a source of expertise about how to build more just, more accurate, more human science teaching. This activity asks you to sit with that expertise before you have your own classroom.</p></section>';
+
+    html += '<p class="note">'+SOURCE_NOTE+'</p>';
+
+    var wrap = el(html);
+    wrap.querySelectorAll(".home-card").forEach(function(b){
+      b.addEventListener("click", function(){ goTo(b.getAttribute("data-case")); });
+    });
+    return wrap;
+  }
+
+  function step(n,strong,text){
+    return '<div class="step"><div class="n">'+n+'</div><p><strong>'+strong+'.</strong> '+text+'</p></div>';
+  }
+
+  function renderCase(c){
+    var html = '';
+    html += '<div class="case-hero"><div class="case-icon">'+ICONS[c.icon]+'</div><div>' +
+      '<span class="eyebrow">Case study</span>' +
+      '<h1>'+c.name+'</h1>' +
+      '<div class="descriptor">'+c.descriptor+'</div>' +
+      '</div></div>';
+
+    html += '<blockquote class="voice">“'+c.quote+'”<cite>'+c.quoteSource+'</cite></blockquote>';
+
+    if(c.id==="ad") html += '<div class="tape-strip" aria-hidden="true"></div>';
+
+    html += '<section class="block"><h2><span class="num">01</span>Identity &amp; science experience</h2>';
+    c.identity.forEach(function(p){ html += '<p>'+p+'</p>'; });
+    html += '</section>';
+
+    html += '<section class="block"><h2><span class="num">02</span>The problem, the invention, the iterations</h2>';
+    html += '<div class="callout"><h4>'+c.invention.name+'</h4><p>'+c.invention.summary+'</p></div>';
+    html += '<p style="color:var(--ink-faint);font-size:.82rem;margin-top:1.2em;">Click a point on the timeline to expand it.</p>';
+    html += '<div class="timeline">';
+    c.timeline.forEach(function(node, i){
+      html += '<div class="tl-node" data-idx="'+i+'"><button class="tl-toggle" aria-expanded="false">' +
+        '<span class="tl-when">'+node.when+'</span>' +
+        '<div class="tl-title">'+node.title+'</div>' +
+        '<span class="tl-hint">Tap to read more</span>' +
+        '<div class="tl-detail">'+node.text+'</div>' +
+        '</button></div>';
+    });
+    html += '</div>';
+    if(c.id==="christopher"){
+      html += '<h4 style="margin-top:1.6em;">SUSU’s four “pancake” data layers</h4>';
+      html += '<div class="layers">' +
+        '<div class="layer"><b>01</b>Community survey — self-reported bullying &amp; demographics</div>' +
+        '<div class="layer"><b>02</b>GIS map pins — crowdsourced locations, taught to him by “Granny”</div>' +
+        '<div class="layer"><b>03</b>Public crime-map data (crimemapping.com)</div>' +
+        '<div class="layer"><b>04</b>Real-time crowdsourced reports</div>' +
+        '</div>';
+      html += '<div class="pin-legend"><span><span class="pin-dot" style="background:var(--pin-physical)"></span>Physical abuse pin</span><span><span class="pin-dot" style="background:var(--pin-verbal)"></span>Verbal abuse pin</span></div>';
+    }
+    html += '</section>';
+
+    html += '<section class="block"><h2><span class="num">03</span>Counternarratives, in '+c.name+'’s words</h2>';
+    c.counternarratives.forEach(function(cn, i){
+      html += '<blockquote class="voice">“'+cn.quote+'”<cite>'+cn.source+'</cite></blockquote>';
+      html += '<button class="reveal-btn" data-rid="'+c.id+'-cn-'+i+'">How does this challenge the culture of power in science?</button>';
+      html += '<div class="reveal-panel" id="'+c.id+'-cn-'+i+'"><p>'+cn.analysis+'</p></div>';
+    });
+    html += '</section>';
+
+    html += '<section class="block"><h2><span class="num">04</span>Supporting '+c.name+'’s science work</h2>';
+    html += '<p>What could a science teacher actually do with this? Here are concrete, classroom-level moves grounded in '+c.name+'’s own counternarrative. Check off the ones you want to try.</p>';
+    html += '<div class="support-grid">';
+    c.support.forEach(function(s, i){
+      var key = c.id+"_try_"+i;
+      var checked = loadVal(key)==="1";
+      html += '<div class="support-card"><h4>'+s.h+'</h4><p>'+s.t+'</p>' +
+        '<label class="try-check'+(checked?' checked':'')+'"><input type="checkbox" data-trykey="'+key+'" '+(checked?"checked":"")+'/> I want to try this</label></div>';
+    });
+    html += '</div></section>';
+
+    html += '<section class="block"><h2><span class="num">05</span>Reflect on '+c.name+'’s case</h2>';
+    c.reflection.forEach(function(r){ html += reflectCardHTML(r, c.name); });
+    html += '</section>';
+
+    var wrap = el(html);
+    wireTimeline(wrap);
+    wireReveal(wrap);
+    wireTryChecks(wrap);
+    wireReflectBoxes(wrap);
+    return wrap;
+  }
+
+  function renderCross(){
+    var html = '';
+    html += '<span class="eyebrow">Looking across all three cases</span>';
+    html += '<h1>What AD, Faith &amp; Christopher teach us together</h1>';
+    html += '<p>'+CROSSCASE.intro+'</p>';
+    CROSSCASE.claims.forEach(function(cl){
+      html += '<section class="block"><h2>'+cl.title+'</h2><p>'+cl.text+'</p></section>';
+    });
+    html += '<section class="block"><h2>Six commitments to carry into your teaching</h2><div class="commit-grid">';
+    CROSSCASE.commitments.forEach(function(cm){
+      html += '<div class="commit-card"><span class="eyebrow">'+cm.t+'</span><p>'+cm.d+'</p></div>';
+    });
+    html += '</div></section>';
+    html += '<section class="block"><h2>Reflect: across the three cases</h2>' + reflectCardHTML(SYNTH_PROMPT, "the three cases") + '</section>';
+    var wrap = el(html);
+    wireReflectBoxes(wrap);
+    return wrap;
+  }
+
+  function renderDH(){
+    var html = '';
+    html += '<span class="eyebrow">Field-building</span>';
+    html += '<h1>This is a digital humanities project, too</h1>';
+    DH.what.forEach(function(p){ html += '<p>'+p+'</p>'; });
+
+    html += '<section class="block"><h2>Why this counts as digital humanities</h2>';
+    DH.why.forEach(function(w){
+      html += '<div class="callout"><h4>'+w.t+'</h4><p>'+w.d+'</p></div>';
+    });
+    html += '</section>';
+
+    html += '<section class="block"><h2>How we can support more digital humanities in science education</h2>';
+    DH.support.forEach(function(g){
+      html += '<h3 style="margin-top:1.2em;font-size:1.02rem;">'+g.group+'</h3><ul class="plain">';
+      g.items.forEach(function(it){ html += '<li>'+it+'</li>'; });
+      html += '</ul>';
+    });
+    html += '</section>';
+
+    html += '<section class="block"><h2>Reflect: digital humanities &amp; your practice</h2>' +
+      reflectCardHTML({id:DH.reflectionId, prompt:DH.reflectionPrompt}, "digital humanities") + '</section>';
+
+    var wrap = el(html);
+    wireReflectBoxes(wrap);
+    return wrap;
+  }
+
+  function reflectCardHTML(r, srcLabel){
+    return '<div class="reflect-card">' +
+      '<p class="prompt">'+r.prompt+'<span class="src">Reflection on '+srcLabel+'</span></p>' +
+      '<textarea class="reflect-box" data-rkey="'+r.id+'" placeholder="Write your reflection here…"></textarea>' +
+      '<div class="wc" data-wcfor="'+r.id+'">0 words</div>' +
+      '</div>';
+  }
+
+  function renderPortfolio(){
+    var html = '';
+    html += '<span class="eyebrow">For credit</span>';
+    html += '<h1>My Reflection Portfolio</h1>';
+    html += '<p>Fill in your details, review everything you’ve written across the three cases, and export a clean PDF (or text file) to submit to your instructor. This page runs entirely in your browser — there is no server, so nothing is “turned in” automatically. Use the export button below, then upload the file to your course’s LMS or email it to your instructor.</p>';
+
+    html += '<section class="block"><h2>Your details</h2>';
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:560px;">' +
+      field("Name","pf_name") + field("Course / instructor","pf_course") +
+      '</div></section>';
+
+    html += '<section class="block"><h2>All reflections</h2>';
+    CASES.forEach(function(c){
+      html += '<h3 style="margin-top:1.4em;">'+c.name+'</h3>';
+      c.reflection.forEach(function(r){ html += reflectCardHTML(r, c.name); });
+    });
+    html += '<h3 style="margin-top:1.4em;">Across the three cases</h3>' + reflectCardHTML(SYNTH_PROMPT, "the three cases");
+    html += '<h3 style="margin-top:1.4em;">Digital humanities</h3>' + reflectCardHTML({id:DH.reflectionId, prompt:DH.reflectionPrompt}, "digital humanities");
+    html += '</section>';
+
+    html += '<div class="portfolio-bar">' +
+      '<button class="btn primary" id="btnPrint">Print / Save as PDF</button>' +
+      '<button class="btn" id="btnTxt">Download as text file</button>' +
+      '<span class="save-status" id="saveStatus">All responses autosave in this browser</span>' +
+      '</div>';
+
+    html += '<p class="note">Tip: choose “Save as PDF” as the destination printer in the print dialog. The exported version hides all navigation and buttons and formats your name, course, and every prompt and answer as a clean document.</p>';
+
+    var wrap = el(html);
+    wireTextFields(wrap);
+    wireReflectBoxes(wrap);
+
+    wrap.querySelector("#btnPrint").addEventListener("click", function(){
+      buildPrintCover();
+      window.print();
+    });
+    wrap.querySelector("#btnTxt").addEventListener("click", downloadTxt);
+    return wrap;
+  }
+
+  function field(label, key){
+    var val = loadVal(key) || "";
+    return '<div><label class="field-label">'+label+'</label>' +
+      '<input class="text-input" data-fieldkey="'+key+'" value="'+val.replace(/"/g,"&quot;")+'"/></div>';
+  }
+
+  function wireTextFields(scope){
+    scope.querySelectorAll("[data-fieldkey]").forEach(function(inp){
+      inp.addEventListener("input", function(){
+        saveVal(inp.getAttribute("data-fieldkey"), inp.value);
+        flashSaved();
+      });
+    });
+  }
+
+  /* ================= INTERACTION WIRING ================= */
+  function wireTimeline(scope){
+    scope.querySelectorAll(".tl-node").forEach(function(node){
+      var btn = node.querySelector(".tl-toggle");
+      btn.addEventListener("click", function(){
+        var open = node.classList.toggle("open");
+        btn.setAttribute("aria-expanded", open ? "true":"false");
+      });
+    });
+  }
+  function wireReveal(scope){
+    scope.querySelectorAll(".reveal-btn").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var panel = scope.querySelector("#"+CSS.escape(btn.getAttribute("data-rid")));
+        var open = panel.classList.toggle("open");
+        btn.textContent = open ? "Hide the analysis" : "How does this challenge the culture of power in science?";
+      });
+    });
+  }
+  function wireTryChecks(scope){
+    scope.querySelectorAll("[data-trykey]").forEach(function(cb){
+      cb.addEventListener("change", function(){
+        saveVal(cb.getAttribute("data-trykey"), cb.checked ? "1":"0");
+        cb.closest(".try-check").classList.toggle("checked", cb.checked);
+        updateProgress();
+      });
+    });
+  }
+  function wireReflectBoxes(scope){
+    scope.querySelectorAll(".reflect-box").forEach(function(ta){
+      var key = ta.getAttribute("data-rkey");
+      ta.value = loadVal("reflect_"+key) || "";
+      updateWordCount(scope, key, ta.value);
+      var timer=null;
+      ta.addEventListener("input", function(){
+        updateWordCount(scope, key, ta.value);
+        clearTimeout(timer);
+        timer = setTimeout(function(){
+          saveVal("reflect_"+key, ta.value);
+          flashSaved();
+        }, 400);
+      });
+    });
+  }
+  function updateWordCount(scope, key, val){
+    var wc = scope.querySelector('[data-wcfor="'+key+'"]');
+    if(!wc) return;
+    var n = (val.trim().match(/\S+/g) || []).length;
+    wc.textContent = n + (n===1 ? " word" : " words");
+  }
+  function flashSaved(){
+    var s = document.getElementById("saveStatus");
+    if(!s) return;
+    var now = new Date();
+    s.textContent = "Saved at " + now.toLocaleTimeString();
+  }
+
+  function downloadTxt(){
+    var lines = [];
+    lines.push("REFLECTION PORTFOLIO");
+    lines.push("Counternarratives of the Culture of Power in Science");
+    lines.push("Name: " + (loadVal("pf_name")||""));
+    lines.push("Course / instructor: " + (loadVal("pf_course")||""));
+    lines.push("Exported: " + new Date().toString());
+    lines.push("".padEnd(60,"="));
+    allReflectionIds().forEach(function(id){
+      var prompt = findPromptById(id);
+      lines.push("");
+      lines.push("PROMPT: " + prompt);
+      lines.push("-".repeat(60));
+      lines.push(loadVal("reflect_"+id) || "(no response yet)");
+    });
+    var blob = new Blob([lines.join("\n")], {type:"text/plain"});
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "reflection-portfolio.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
+  function findPromptById(id){
+    for(var i=0;i<CASES.length;i++){
+      var c=CASES[i];
+      for(var j=0;j<c.reflection.length;j++){ if(c.reflection[j].id===id) return c.reflection[j].prompt; }
+    }
+    if(id===SYNTH_PROMPT.id) return SYNTH_PROMPT.prompt;
+    if(id===DH.reflectionId) return DH.reflectionPrompt;
+    return "";
+  }
+
+  function buildPrintCover(){
+    var old = document.getElementById("printCover");
+    if(old) old.remove();
+    var cover = document.createElement("div");
+    cover.className = "print-cover";
+    cover.id = "printCover";
+    cover.style.padding = "80px 40px";
+    cover.innerHTML =
+      "<h1 style='font-size:2rem;'>Reflection Portfolio</h1>" +
+      "<p style='font-size:1.1rem;'>Counternarratives of the Culture of Power in Science<br>An interactive case-study activity for pre-service science teachers</p>" +
+      "<p style='margin-top:60px;'><strong>Name:</strong> " + (loadVal("pf_name")||"____________________") + "</p>" +
+      "<p><strong>Course / instructor:</strong> " + (loadVal("pf_course")||"____________________") + "</p>" +
+      "<p><strong>Date:</strong> " + new Date().toLocaleDateString() + "</p>" +
+      "<p style='margin-top:60px;font-size:.8rem;color:#555;'>"+SOURCE_NOTE+"</p>";
+    document.getElementById("app").parentNode.insertBefore(cover, document.getElementById("app"));
+  }
+
+  /* ================= MAIN RENDER ================= */
+  function render(){
+    var app = document.getElementById("app");
+    app.innerHTML = "";
+    var old = document.getElementById("printCover");
+    if(old) old.remove();
+    var content;
+    if(current==="home") content = renderHome();
+    else if(current==="cross") content = renderCross();
+    else if(current==="dh") content = renderDH();
+    else if(current==="portfolio") content = renderPortfolio();
+    else content = renderCase(caseById(current));
+    app.appendChild(content);
+    document.title = "Counternarratives — " + (TABS.find(function(t){return t.id===current;})||{label:"Home"}).label;
+  }
+
+  /* ================= INIT ================= */
+  renderNav();
+  render();
+
+  var mo = new MutationObserver(function(){ renderNav(); });
+  mo.observe(document.documentElement, {attributes:true, attributeFilter:["data-theme"]});
+  if(window.matchMedia){
+    try{ window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", renderNav); }catch(e){}
+  }
+
+})();
+</script>
+
+</body>
+</html>
